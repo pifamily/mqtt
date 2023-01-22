@@ -1,2 +1,21 @@
 ---
 # defaults file for mqtt
+manifest_folder: '/home/{{ ansible_user }}/manifests'
+mqtt_namespace: mqtt
+mqtt_storage: 100M
+mqtt_image: eclipse-mosquitto:1.6.12
+mqtt_port: 31883
+
+mqtt_manifests : [{
+  src: mqtt_config.j2.yaml,
+  dest: mqtt_config.yaml
+},{
+  src: mqtt_data_pvc.j2.yaml,
+  dest: mqtt_data_pvc.yaml
+},{
+  src: mqtt_deployment.j2.yaml,
+  dest: mqtt_deployment.yaml
+},{
+  src: mqtt_service.j2.yaml,
+  dest: mqtt_service.yaml
+}]

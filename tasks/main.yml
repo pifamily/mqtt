@@ -1,2 +1,20 @@
 ---
 # tasks file for mqtt
+- name: Create namespace
+  shell:
+    cmd: 'kubectl create namespace {{ mqtt_namespace }}'
+  become: true
+  ignore_errors: true
+- name: Ensure manifests folder exits
+  file:
+    path: '{{ manifest_folder }}'
+    state: directory
+- name: Render manifests
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ manifest_folder }}/{{ item.dest }}'
+  with_items: '{{ mqtt_manifests }}'
+- name: Apply manifests
+  shell:
+    cmd: 'kubectl apply -f {{ manifest_folder }}/{{ item.dest }} -n {{ mqtt_namespace }}'
+  with_items: '{{ mqtt_manifests }}'
